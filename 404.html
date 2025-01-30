@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Defender 404</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: #111;
+            color: #0f0;
+            font-family: Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #gameContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        canvas {
+            background: #222;
+            display: block;
+        }
+        .legend {
+            font-size: 18px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 48px;
+            margin-top: 50px;
+        }
+        .sub-error {
+            color: red;
+            font-size: 32px;
+            margin-bottom: 40px;
+        }
+        .controls {
+            display: none;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #0f0;
+            color: black;
+            padding: 15px;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        @media (max-width: 768px) {
+            .controls {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="error">ERROR 404</h1>
+    <h2 class="sub-error">Page Not Found</h2>
+    <p>Bored? Play a round of Cyber Defender 404!</p>
+    <p>Instructions: Use the left and right arrow keys or touch buttons to move.</p>
+    <p>Press SPACE or tap ▶️ to start!</p>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="500" height="400"></canvas>
+    </div>
+    <div class="controls">
+        <button class="button" id="leftButton">⬅️</button>
+        <button class="button" id="startButton">▶️</button>
+        <button class="button" id="rightButton">➡️</button>
+    </div>
+    <div class="legend">
+        <p><span style="font-size: 24px;">🦠</span> <b>Virus</b> - <span style="color: red;">Avoid infection!</span></p>
+        <p><span style="font-size: 24px;">📦</span> <b>Malware</b> - <span style="color: orange;">Block harmful software!</span></p>
+        <p><span style="font-size: 24px;">🌊</span> <b>DDoS Attack</b> - <span style="color: blue;">Stop overload attacks!</span></p>
+    </div>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        let playerX, threats, score, gameOver, gameRunning, threatInterval;
+        const threatTypes = [
+            { emoji: "🦠", color: "red", type: "Virus" },
+            { emoji: "📦", color: "orange", type: "Malware" },
+            { emoji: "🌊", color: "blue", type: "DDoS Attack" }
+        ];
+
+        function resetGame() {
+            playerX = canvas.width / 2 - 20;
+            threats = [];
+            score = 0;
+            gameOver = false;
+            gameRunning = false;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function startGame() {
+            if (!gameRunning) {
+                gameRunning = true;
+                gameOver = false;
+                threats = [];
+                threatInterval = setInterval(spawnThreat, 1200);
+                updateGame();
+            }
+        }
+
+        function spawnThreat() {
+            if (!gameRunning) return;
+            const x = Math.random() * (canvas.width - 20);
+            const threat = threatTypes[Math.floor(Math.random() * threatTypes.length)];
+            threats.push({ x: x, y: 0, emoji: threat.emoji, color: threat.color, type: threat.type });
+        }
+
+        function updateGame() {
+            if (!gameRunning || gameOver) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#0f0";
+            ctx.fillRect(playerX, canvas.height - 30, 40, 10);
+
+            threats.forEach((t, i) => {
+                t.y += 2;
+                ctx.fillStyle = t.color;
+                ctx.font = "30px Arial";
+                ctx.fillText(t.emoji, t.x, t.y);
+                
+                if (t.y > canvas.height - 40 && t.x > playerX - 20 && t.x < playerX + 40) {
+                    threats.splice(i, 1);
+                    score++;
+                }
+                if (t.y > canvas.height) {
+                    gameOver = true;
+                    gameRunning = false;
+                    clearInterval(threatInterval);
+                }
+            });
+            requestAnimationFrame(updateGame);
+        }
+
+        document.addEventListener("keydown", function(e) {
+            if (e.key === " ") {
+                if (gameOver) {
+                    resetGame();
+                }
+                startGame();
+            }
+            if (gameRunning) {
+                if (e.key === "ArrowLeft" && playerX > 0) playerX -= 20;
+                if (e.key === "ArrowRight" && playerX < canvas.width - 40) playerX += 20;
+            }
+        });
+
+        document.getElementById("leftButton").addEventListener("click", () => {
+            if (playerX > 0) playerX -= 20;
+        });
+        
+        document.getElementById("rightButton").addEventListener("click", () => {
+            if (playerX < canvas.width - 40) playerX += 20;
+        });
+        
+        document.getElementById("startButton").addEventListener("click", () => {
+            if (gameOver) resetGame();
+            startGame();
+        });
+        
+        resetGame();
+    </script>
+</body>
+</html>
