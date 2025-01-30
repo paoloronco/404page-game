@@ -1,2 +1,6 @@
 # 404page-game
 "Cyber Defender 404" is a mini-game designed to raise awareness about cybersecurity in a fun and interactive way. Challenge yourself, dodge online threats, and learn the basics of cybersecurity while playing! 🚀🔒
+
+Check out the gameplay demo below:
+
+<video src="images/demo-video.mp4" controls width="600"></video>
