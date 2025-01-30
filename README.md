@@ -4,7 +4,6 @@
 
 ## 🎥 Demo
 
-Check out the gameplay demo below:
 🔗 **Try it live:** [404 Cybersecurity Game](https://www.paoloronco.it/404)
 
 ![Gameplay Demo](images/demo-video.gif)
