@@ -3,4 +3,4 @@
 
 Check out the gameplay demo below:
 
-<video src="images/demo-video.mp4" controls width="600"></video>
+<video src="images/demo-video.gif" controls width="600"></video>
